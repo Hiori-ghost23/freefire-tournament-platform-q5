@@ -23,7 +23,7 @@ export default function TournamentDetailPage({ params }: { params: { id: string 
     entryFee: "5000 CFA",
     prizePool: "50000 CFA",
     participants: 24,
-    maxParticipants: 50,
+    maxParticipants: 48,
     status: "open",
     description:
       "Tournoi Solo intense avec des récompenses exceptionnelles. Montrez vos compétences et dominez le battlefield !",
