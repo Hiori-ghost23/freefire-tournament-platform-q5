@@ -3,6 +3,8 @@ import { supabase } from "@/lib/supabase"
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 
+const JWT_SECRET = process.env.JWT_SECRET || "fallback-secret-key"
+
 export async function POST(request: NextRequest) {
   try {
     const { email, password } = await request.json()
@@ -33,7 +35,7 @@ export async function POST(request: NextRequest) {
         email: user.email,
         pseudo: user.pseudo,
       },
-      process.env.JWT_SECRET!,
+      JWT_SECRET,
       { expiresIn: "7d" },
     )
 

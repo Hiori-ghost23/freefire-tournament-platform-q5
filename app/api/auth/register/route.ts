@@ -41,6 +41,7 @@ export async function POST(request: NextRequest) {
         password_hash: passwordHash,
         free_fire_id: freefireId || null,
         email_verified: false,
+        created_at: new Date().toISOString(),
       })
       .select()
       .single()

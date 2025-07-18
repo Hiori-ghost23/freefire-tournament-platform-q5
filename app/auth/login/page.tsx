@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Trophy, Mail, Lock, Loader2 } from "lucide-react"
+import { Trophy, Loader2, AlertCircle, CheckCircle } from "lucide-react"
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({
@@ -19,12 +19,14 @@ export default function LoginPage() {
   })
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
+  const [success, setSuccess] = useState("")
   const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
     setError("")
+    setSuccess("")
 
     try {
       const response = await fetch("/api/auth/login", {
@@ -37,10 +39,11 @@ export default function LoginPage() {
 
       const data = await response.json()
 
-      if (response.ok) {
-        // Redirection vers le dashboard
-        router.push("/dashboard")
-        router.refresh()
+      if (data.success) {
+        setSuccess("Connexion réussie ! Redirection...")
+        setTimeout(() => {
+          router.push("/dashboard")
+        }, 1500)
       } else {
         setError(data.error || "Erreur lors de la connexion")
       }
@@ -59,20 +62,6 @@ export default function LoginPage() {
     })
   }
 
-  const handleTestLogin = async (userType: "user" | "admin") => {
-    const testCredentials = {
-      user: { email: "test@example.com", password: "password123" },
-      admin: { email: "admin@ffarena.com", password: "admin123" },
-    }
-
-    setFormData(testCredentials[userType])
-
-    // Auto-submit après un court délai
-    setTimeout(() => {
-      handleSubmit({ preventDefault: () => {} } as React.FormEvent)
-    }, 500)
-  }
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
       <Card className="w-full max-w-md">
@@ -83,48 +72,49 @@ export default function LoginPage() {
           <CardTitle className="text-2xl font-bold">Connexion</CardTitle>
           <CardDescription>Connectez-vous à votre compte FF Arena</CardDescription>
         </CardHeader>
-
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
-            {error && (
-              <Alert variant="destructive">
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
-            )}
-
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  placeholder="votre@email.com"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="pl-10"
-                  required
-                />
-              </div>
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="votre@email.com"
+                value={formData.email}
+                onChange={handleChange}
+                required
+                disabled={isLoading}
+              />
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="password">Mot de passe</Label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                <Input
-                  id="password"
-                  name="password"
-                  type="password"
-                  placeholder="••••••••"
-                  value={formData.password}
-                  onChange={handleChange}
-                  className="pl-10"
-                  required
-                />
-              </div>
+              <Input
+                id="password"
+                name="password"
+                type="password"
+                placeholder="Votre mot de passe"
+                value={formData.password}
+                onChange={handleChange}
+                required
+                disabled={isLoading}
+              />
             </div>
+
+            {error && (
+              <Alert variant="destructive">
+                <AlertCircle className="h-4 w-4" />
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
+
+            {success && (
+              <Alert className="border-green-200 bg-green-50">
+                <CheckCircle className="h-4 w-4 text-green-600" />
+                <AlertDescription className="text-green-800">{success}</AlertDescription>
+              </Alert>
+            )}
 
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading ? (
@@ -138,38 +128,16 @@ export default function LoginPage() {
             </Button>
           </form>
 
-          {/* Comptes de test */}
-          <div className="mt-6 space-y-2">
-            <p className="text-sm text-gray-600 text-center">Comptes de test :</p>
-            <div className="flex space-x-2">
-              <Button
-                variant="outline"
-                size="sm"
-                className="flex-1 bg-transparent"
-                onClick={() => handleTestLogin("user")}
-                disabled={isLoading}
-              >
-                Utilisateur
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                className="flex-1 bg-transparent"
-                onClick={() => handleTestLogin("admin")}
-                disabled={isLoading}
-              >
-                Admin
-              </Button>
-            </div>
-          </div>
-
-          <div className="mt-6 text-center">
+          <div className="mt-6 text-center space-y-2">
             <p className="text-sm text-gray-600">
               Pas encore de compte ?{" "}
-              <Link href="/auth/register" className="text-blue-600 hover:underline">
+              <Link href="/auth/register" className="text-blue-600 hover:underline font-medium">
                 S'inscrire
               </Link>
             </p>
+            <Link href="/" className="text-sm text-gray-500 hover:underline">
+              Retour à l'accueil
+            </Link>
           </div>
         </CardContent>
       </Card>
