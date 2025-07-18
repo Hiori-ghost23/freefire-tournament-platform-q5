@@ -3,13 +3,14 @@
 import type React from "react"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Trophy, Mail, Lock, User } from "lucide-react"
-import Link from "next/link"
+import { Trophy, User, Mail, Lock, Gamepad2, Loader2 } from "lucide-react"
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -17,132 +18,196 @@ export default function RegisterPage() {
     email: "",
     password: "",
     confirmPassword: "",
+    freefireId: "",
   })
-  const [loading, setLoading] = useState(false)
-  const [message, setMessage] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
+  const [success, setSuccess] = useState("")
+  const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setLoading(true)
+    setIsLoading(true)
     setError("")
-    setMessage("")
+    setSuccess("")
 
+    // Validation côté client
     if (formData.password !== formData.confirmPassword) {
       setError("Les mots de passe ne correspondent pas")
-      setLoading(false)
+      setIsLoading(false)
+      return
+    }
+
+    if (formData.password.length < 6) {
+      setError("Le mot de passe doit contenir au moins 6 caractères")
+      setIsLoading(false)
       return
     }
 
     try {
-      // Simulation d'inscription
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-      setMessage("Inscription réussie ! Vérifiez votre email pour confirmer votre compte.")
-    } catch (err) {
-      setError("Erreur lors de l'inscription. Veuillez réessayer.")
+      const response = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          pseudo: formData.pseudo,
+          email: formData.email,
+          password: formData.password,
+          freefireId: formData.freefireId,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        setSuccess("Compte créé avec succès ! Redirection...")
+        setTimeout(() => {
+          router.push("/auth/login")
+        }, 2000)
+      } else {
+        setError(data.error || "Erreur lors de l'inscription")
+      }
+    } catch (error) {
+      console.error("Erreur:", error)
+      setError("Erreur de connexion au serveur")
     } finally {
-      setLoading(false)
+      setIsLoading(false)
     }
   }
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    })
+  }
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-red-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <div className="flex items-center justify-center space-x-2 mb-4">
-            <Trophy className="h-8 w-8 text-orange-600" />
-            <span className="text-2xl font-bold text-gray-900">FF Arena</span>
+          <div className="flex justify-center mb-4">
+            <Trophy className="h-12 w-12 text-orange-600" />
           </div>
-          <CardTitle className="text-2xl">Créer un Compte</CardTitle>
-          <CardDescription>Rejoignez la communauté Free Fire</CardDescription>
+          <CardTitle className="text-2xl font-bold">Créer un compte</CardTitle>
+          <CardDescription>Rejoignez FF Arena et participez aux tournois !</CardDescription>
         </CardHeader>
+
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="pseudo">Pseudo</Label>
-              <div className="relative">
-                <User className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                <Input
-                  id="pseudo"
-                  type="text"
-                  placeholder="Votre pseudo de joueur"
-                  className="pl-10"
-                  value={formData.pseudo}
-                  onChange={(e) => setFormData({ ...formData, pseudo: e.target.value })}
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="email">Adresse Email</Label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="votre@email.com"
-                  className="pl-10"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="password">Mot de Passe</Label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="••••••••"
-                  className="pl-10"
-                  value={formData.password}
-                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="confirmPassword">Confirmer le Mot de Passe</Label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                <Input
-                  id="confirmPassword"
-                  type="password"
-                  placeholder="••••••••"
-                  className="pl-10"
-                  value={formData.confirmPassword}
-                  onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
-                  required
-                />
-              </div>
-            </div>
-
             {error && (
               <Alert variant="destructive">
                 <AlertDescription>{error}</AlertDescription>
               </Alert>
             )}
 
-            {message && (
-              <Alert>
-                <AlertDescription>{message}</AlertDescription>
+            {success && (
+              <Alert className="border-green-200 bg-green-50">
+                <AlertDescription className="text-green-800">{success}</AlertDescription>
               </Alert>
             )}
 
-            <Button type="submit" className="w-full bg-orange-600 hover:bg-orange-700" disabled={loading}>
-              {loading ? "Inscription..." : "Créer mon Compte"}
+            <div className="space-y-2">
+              <Label htmlFor="pseudo">Pseudo</Label>
+              <div className="relative">
+                <User className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                <Input
+                  id="pseudo"
+                  name="pseudo"
+                  type="text"
+                  placeholder="Votre pseudo"
+                  value={formData.pseudo}
+                  onChange={handleChange}
+                  className="pl-10"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <div className="relative">
+                <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  placeholder="votre@email.com"
+                  value={formData.email}
+                  onChange={handleChange}
+                  className="pl-10"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="freefireId">ID Free Fire (optionnel)</Label>
+              <div className="relative">
+                <Gamepad2 className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                <Input
+                  id="freefireId"
+                  name="freefireId"
+                  type="text"
+                  placeholder="Votre ID Free Fire"
+                  value={formData.freefireId}
+                  onChange={handleChange}
+                  className="pl-10"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="password">Mot de passe</Label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                <Input
+                  id="password"
+                  name="password"
+                  type="password"
+                  placeholder="••••••••"
+                  value={formData.password}
+                  onChange={handleChange}
+                  className="pl-10"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="confirmPassword">Confirmer le mot de passe</Label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                <Input
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  type="password"
+                  placeholder="••••••••"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  className="pl-10"
+                  required
+                />
+              </div>
+            </div>
+
+            <Button type="submit" className="w-full" disabled={isLoading}>
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Création en cours...
+                </>
+              ) : (
+                "Créer mon compte"
+              )}
             </Button>
           </form>
 
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
               Déjà un compte ?{" "}
-              <Link href="/auth/login" className="text-orange-600 hover:underline">
+              <Link href="/auth/login" className="text-blue-600 hover:underline">
                 Se connecter
               </Link>
             </p>

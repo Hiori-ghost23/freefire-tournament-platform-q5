@@ -3,106 +3,170 @@
 import type React from "react"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Trophy, Mail, Lock } from "lucide-react"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { Trophy, Mail, Lock, Loader2 } from "lucide-react"
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   })
-  const [loading, setLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
   const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setLoading(true)
+    setIsLoading(true)
     setError("")
 
     try {
-      // Simulation de connexion
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-      router.push("/dashboard")
-    } catch (err) {
-      setError("Email ou mot de passe incorrect")
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        // Redirection vers le dashboard
+        router.push("/dashboard")
+        router.refresh()
+      } else {
+        setError(data.error || "Erreur lors de la connexion")
+      }
+    } catch (error) {
+      console.error("Erreur:", error)
+      setError("Erreur de connexion au serveur")
     } finally {
-      setLoading(false)
+      setIsLoading(false)
     }
   }
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    })
+  }
+
+  const handleTestLogin = async (userType: "user" | "admin") => {
+    const testCredentials = {
+      user: { email: "test@example.com", password: "password123" },
+      admin: { email: "admin@ffarena.com", password: "admin123" },
+    }
+
+    setFormData(testCredentials[userType])
+
+    // Auto-submit après un court délai
+    setTimeout(() => {
+      handleSubmit({ preventDefault: () => {} } as React.FormEvent)
+    }, 500)
+  }
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-red-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <div className="flex items-center justify-center space-x-2 mb-4">
-            <Trophy className="h-8 w-8 text-orange-600" />
-            <span className="text-2xl font-bold text-gray-900">FF Arena</span>
+          <div className="flex justify-center mb-4">
+            <Trophy className="h-12 w-12 text-orange-600" />
           </div>
-          <CardTitle className="text-2xl">Connexion</CardTitle>
-          <CardDescription>Accédez à votre compte joueur</CardDescription>
+          <CardTitle className="text-2xl font-bold">Connexion</CardTitle>
+          <CardDescription>Connectez-vous à votre compte FF Arena</CardDescription>
         </CardHeader>
+
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email">Adresse Email</Label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="votre@email.com"
-                  className="pl-10"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="password">Mot de Passe</Label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="••••••••"
-                  className="pl-10"
-                  value={formData.password}
-                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <Link href="/auth/forgot-password" className="text-sm text-orange-600 hover:underline">
-                Mot de passe oublié ?
-              </Link>
-            </div>
-
             {error && (
               <Alert variant="destructive">
                 <AlertDescription>{error}</AlertDescription>
               </Alert>
             )}
 
-            <Button type="submit" className="w-full bg-orange-600 hover:bg-orange-700" disabled={loading}>
-              {loading ? "Connexion..." : "Se Connecter"}
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <div className="relative">
+                <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  placeholder="votre@email.com"
+                  value={formData.email}
+                  onChange={handleChange}
+                  className="pl-10"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="password">Mot de passe</Label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                <Input
+                  id="password"
+                  name="password"
+                  type="password"
+                  placeholder="••••••••"
+                  value={formData.password}
+                  onChange={handleChange}
+                  className="pl-10"
+                  required
+                />
+              </div>
+            </div>
+
+            <Button type="submit" className="w-full" disabled={isLoading}>
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Connexion...
+                </>
+              ) : (
+                "Se connecter"
+              )}
             </Button>
           </form>
+
+          {/* Comptes de test */}
+          <div className="mt-6 space-y-2">
+            <p className="text-sm text-gray-600 text-center">Comptes de test :</p>
+            <div className="flex space-x-2">
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex-1 bg-transparent"
+                onClick={() => handleTestLogin("user")}
+                disabled={isLoading}
+              >
+                Utilisateur
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex-1 bg-transparent"
+                onClick={() => handleTestLogin("admin")}
+                disabled={isLoading}
+              >
+                Admin
+              </Button>
+            </div>
+          </div>
 
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
               Pas encore de compte ?{" "}
-              <Link href="/auth/register" className="text-orange-600 hover:underline">
+              <Link href="/auth/register" className="text-blue-600 hover:underline">
                 S'inscrire
               </Link>
             </p>
