@@ -7,17 +7,17 @@ export async function POST() {
       message: "Déconnexion réussie",
     })
 
-    // Supprimer le cookie d'authentification
+    // Clear the auth token cookie
     response.cookies.set("auth-token", "", {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
-      maxAge: 0, // Expire immédiatement
+      maxAge: 0, // Expire immediately
     })
 
     return response
   } catch (error) {
-    console.error("Erreur déconnexion:", error)
-    return NextResponse.json({ error: "Erreur serveur" }, { status: 500 })
+    console.error("Logout error:", error)
+    return NextResponse.json({ error: "Erreur lors de la déconnexion" }, { status: 500 })
   }
 }

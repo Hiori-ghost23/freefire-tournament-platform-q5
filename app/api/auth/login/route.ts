@@ -3,65 +3,111 @@ import { supabase } from "@/lib/supabase"
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 
-const JWT_SECRET = process.env.JWT_SECRET || "fallback-secret-key"
-
 export async function POST(request: NextRequest) {
   try {
     const { email, password } = await request.json()
 
-    // Validation des données
+    // Validation
     if (!email || !password) {
-      return NextResponse.json({ error: "Email et mot de passe requis" }, { status: 400 })
+      return NextResponse.json({ error: "Email et mot de passe sont requis" }, { status: 400 })
     }
 
-    // Chercher l'utilisateur
+    // Check if Supabase is configured
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+      // Simulation mode with test accounts
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+
+      const testAccounts = [
+        { email: "admin@ffarena.com", password: "admin123", username: "admin", fullName: "Administrateur" },
+        { email: "player@ffarena.com", password: "player123", username: "player1", fullName: "Joueur Test" },
+        { email: "test@ffarena.com", password: "test123", username: "testuser", fullName: "Utilisateur Test" },
+      ]
+
+      const user = testAccounts.find((account) => account.email === email && account.password === password)
+
+      if (!user) {
+        return NextResponse.json({ error: "Email ou mot de passe incorrect" }, { status: 401 })
+      }
+
+      const token = jwt.sign(
+        {
+          id: `sim_${user.username}`,
+          email: user.email,
+          username: user.username,
+          fullName: user.fullName,
+        },
+        process.env.JWT_SECRET || "fallback-secret",
+        { expiresIn: "7d" },
+      )
+
+      const response = NextResponse.json({
+        success: true,
+        message: "Connexion réussie (mode simulation)",
+        user: {
+          id: `sim_${user.username}`,
+          email: user.email,
+          username: user.username,
+          fullName: user.fullName,
+        },
+      })
+
+      response.cookies.set("auth-token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: 60 * 60 * 24 * 7, // 7 days
+      })
+
+      return response
+    }
+
+    // Get user from database
     const { data: user, error } = await supabase.from("users").select("*").eq("email", email).single()
 
     if (error || !user) {
       return NextResponse.json({ error: "Email ou mot de passe incorrect" }, { status: 401 })
     }
 
-    // Vérifier le mot de passe
+    // Verify password
     const isValidPassword = await bcrypt.compare(password, user.password_hash)
 
     if (!isValidPassword) {
       return NextResponse.json({ error: "Email ou mot de passe incorrect" }, { status: 401 })
     }
 
-    // Créer le token JWT
+    // Create JWT token
     const token = jwt.sign(
       {
-        userId: user.id,
+        id: user.id,
         email: user.email,
-        pseudo: user.pseudo,
+        username: user.username,
+        fullName: user.full_name,
       },
-      JWT_SECRET,
+      process.env.JWT_SECRET || "fallback-secret",
       { expiresIn: "7d" },
     )
 
-    // Créer la réponse avec le cookie
     const response = NextResponse.json({
       success: true,
-      message: "Connexion réussie !",
+      message: "Connexion réussie",
       user: {
         id: user.id,
-        pseudo: user.pseudo,
         email: user.email,
-        freefireId: user.free_fire_id,
+        username: user.username,
+        fullName: user.full_name,
       },
     })
 
-    // Définir le cookie
     response.cookies.set("auth-token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
-      maxAge: 60 * 60 * 24 * 7, // 7 jours
+      maxAge: 60 * 60 * 24 * 7, // 7 days
     })
 
     return response
   } catch (error) {
-    console.error("Erreur connexion:", error)
-    return NextResponse.json({ error: "Erreur serveur" }, { status: 500 })
+    console.error("Login error:", error)
+    return NextResponse.json({ error: "Erreur interne du serveur" }, { status: 500 })
   }
 }
