@@ -1,15 +1,33 @@
 "use client"
 
 import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Zap, Trophy, Star, Search, Filter, Gift, Crown, Gamepad2, Calendar, Rocket, Shield } from "lucide-react"
+import {
+  Zap,
+  Trophy,
+  Star,
+  Search,
+  Filter,
+  Gift,
+  Crown,
+  Gamepad2,
+  Calendar,
+  Rocket,
+  Shield,
+  Sparkles,
+  Target,
+  Flame,
+} from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { ParticlesBackground } from "@/components/ui/particles-background"
+import { GamingButton } from "@/components/ui/gaming-button"
+import { GamingCard } from "@/components/ui/gaming-card"
+import { ThemeToggle } from "@/components/ui/theme-toggle"
 
 export default function ShopPage() {
   const router = useRouter()
@@ -27,7 +45,8 @@ export default function ShopPage() {
         price: 900,
         popular: false,
         category: "diamonds",
-        description: "Pack de démarrage idéal",
+        description: "Pack de démarrage idéal pour commencer",
+        rarity: "common",
       },
       {
         id: 2,
@@ -37,6 +56,7 @@ export default function ShopPage() {
         popular: true,
         category: "diamonds",
         description: "Excellent rapport qualité-prix",
+        rarity: "rare",
       },
       {
         id: 3,
@@ -46,6 +66,7 @@ export default function ShopPage() {
         popular: false,
         category: "diamonds",
         description: "Pour les achats moyens",
+        rarity: "common",
       },
       {
         id: 4,
@@ -54,7 +75,8 @@ export default function ShopPage() {
         price: 3200,
         popular: false,
         category: "diamonds",
-        description: "Pack intermédiaire",
+        description: "Pack intermédiaire solide",
+        rarity: "uncommon",
       },
       {
         id: 5,
@@ -63,7 +85,8 @@ export default function ShopPage() {
         price: 3500,
         popular: true,
         category: "diamonds",
-        description: "Très populaire !",
+        description: "Très populaire parmi les joueurs !",
+        rarity: "rare",
       },
       {
         id: 6,
@@ -72,7 +95,8 @@ export default function ShopPage() {
         price: 4500,
         popular: false,
         category: "diamonds",
-        description: "Pour les gros achats",
+        description: "Pour les gros achats stratégiques",
+        rarity: "epic",
       },
       {
         id: 7,
@@ -81,7 +105,8 @@ export default function ShopPage() {
         price: 6000,
         popular: false,
         category: "diamonds",
-        description: "Pack premium",
+        description: "Pack premium de qualité",
+        rarity: "epic",
       },
       {
         id: 8,
@@ -90,7 +115,8 @@ export default function ShopPage() {
         price: 7300,
         popular: true,
         category: "diamonds",
-        description: "Le millier parfait !",
+        description: "Le millier parfait pour les pros !",
+        rarity: "legendary",
       },
       {
         id: 9,
@@ -99,7 +125,8 @@ export default function ShopPage() {
         price: 10200,
         popular: false,
         category: "diamonds",
-        description: "Pack généreux",
+        description: "Pack généreux pour les experts",
+        rarity: "legendary",
       },
       {
         id: 10,
@@ -108,7 +135,8 @@ export default function ShopPage() {
         price: 13600,
         popular: false,
         category: "diamonds",
-        description: "Pour les gros joueurs",
+        description: "Pour les gros joueurs sérieux",
+        rarity: "mythic",
       },
       {
         id: 11,
@@ -117,7 +145,8 @@ export default function ShopPage() {
         price: 18000,
         popular: false,
         category: "diamonds",
-        description: "Pack ultime !",
+        description: "Pack ultime des champions !",
+        rarity: "mythic",
       },
     ],
     subscriptions: [
@@ -130,6 +159,7 @@ export default function ShopPage() {
         category: "subscriptions",
         description: "Avantages premium pendant 7 jours",
         features: ["Diamants quotidiens", "XP bonus", "Accès prioritaire", "Récompenses exclusives"],
+        rarity: "rare",
       },
       {
         id: 102,
@@ -140,6 +170,7 @@ export default function ShopPage() {
         category: "subscriptions",
         description: "Un mois complet d'avantages premium",
         features: ["Diamants quotidiens", "XP bonus", "Accès prioritaire", "Récompenses exclusives", "Support VIP"],
+        rarity: "legendary",
       },
     ],
     passes: [
@@ -151,6 +182,7 @@ export default function ShopPage() {
         category: "passes",
         description: "Le pass ultime pour cette saison",
         features: ["Skins exclusifs", "Emotes rares", "100+ récompenses", "Progression rapide"],
+        rarity: "legendary",
       },
       {
         id: 202,
@@ -161,6 +193,7 @@ export default function ShopPage() {
         category: "passes",
         description: "Boost jusqu'au niveau 6",
         features: ["Progression instantanée", "Récompenses débloquées"],
+        rarity: "common",
       },
       {
         id: 203,
@@ -171,6 +204,7 @@ export default function ShopPage() {
         category: "passes",
         description: "Boost jusqu'au niveau 10",
         features: ["Progression instantanée", "Récompenses débloquées"],
+        rarity: "uncommon",
       },
       {
         id: 204,
@@ -181,6 +215,7 @@ export default function ShopPage() {
         category: "passes",
         description: "Boost jusqu'au niveau 15",
         features: ["Progression instantanée", "Récompenses débloquées"],
+        rarity: "uncommon",
       },
       {
         id: 205,
@@ -191,6 +226,7 @@ export default function ShopPage() {
         category: "passes",
         description: "Boost jusqu'au niveau 20",
         features: ["Progression instantanée", "Récompenses débloquées"],
+        rarity: "rare",
       },
       {
         id: 206,
@@ -201,6 +237,7 @@ export default function ShopPage() {
         category: "passes",
         description: "Boost jusqu'au niveau 25",
         features: ["Progression instantanée", "Récompenses débloquées"],
+        rarity: "rare",
       },
       {
         id: 207,
@@ -211,6 +248,7 @@ export default function ShopPage() {
         category: "passes",
         description: "Boost jusqu'au niveau 30 - Maximum !",
         features: ["Progression instantanée", "Récompenses débloquées", "Bonus spécial niveau max"],
+        rarity: "epic",
       },
     ],
     specials: [
@@ -222,6 +260,7 @@ export default function ShopPage() {
         category: "specials",
         description: "Largage spécial avec récompenses aléatoires",
         features: ["Récompenses aléatoires", "Skins possibles", "Objets rares"],
+        rarity: "rare",
       },
       {
         id: 302,
@@ -231,6 +270,7 @@ export default function ShopPage() {
         category: "specials",
         description: "Largage premium avec meilleures chances",
         features: ["Récompenses premium", "Chances améliorées", "Objets légendaires possibles"],
+        rarity: "epic",
       },
       {
         id: 303,
@@ -241,6 +281,7 @@ export default function ShopPage() {
         category: "specials",
         description: "Accès aux fonctionnalités Evo pendant 7 jours",
         features: ["Fonctionnalités Evo", "Avantages exclusifs", "Progression accélérée"],
+        rarity: "uncommon",
       },
       {
         id: 304,
@@ -256,17 +297,56 @@ export default function ShopPage() {
           "Progression accélérée",
           "Support prioritaire",
         ],
+        rarity: "legendary",
       },
     ],
   }
 
   const categories = [
-    { id: "all", name: "Tous", icon: Gamepad2 },
-    { id: "diamonds", name: "Diamants", icon: Zap },
-    { id: "subscriptions", name: "Abonnements", icon: Star },
-    { id: "passes", name: "Passes", icon: Crown },
-    { id: "specials", name: "Spéciaux", icon: Rocket },
+    { id: "all", name: "Tous", icon: Gamepad2, color: "from-purple-500 to-pink-500" },
+    { id: "diamonds", name: "Diamants", icon: Zap, color: "from-orange-500 to-yellow-500" },
+    { id: "subscriptions", name: "Abonnements", icon: Star, color: "from-blue-500 to-cyan-500" },
+    { id: "passes", name: "Passes", icon: Crown, color: "from-purple-500 to-indigo-500" },
+    { id: "specials", name: "Spéciaux", icon: Rocket, color: "from-green-500 to-emerald-500" },
   ]
+
+  const getRarityColor = (rarity: string) => {
+    switch (rarity) {
+      case "common":
+        return "from-gray-400 to-gray-600"
+      case "uncommon":
+        return "from-green-400 to-green-600"
+      case "rare":
+        return "from-blue-400 to-blue-600"
+      case "epic":
+        return "from-purple-400 to-purple-600"
+      case "legendary":
+        return "from-orange-400 to-orange-600"
+      case "mythic":
+        return "from-red-400 to-red-600"
+      default:
+        return "from-gray-400 to-gray-600"
+    }
+  }
+
+  const getRarityGlow = (rarity: string) => {
+    switch (rarity) {
+      case "common":
+        return "shadow-gray-500/20"
+      case "uncommon":
+        return "shadow-green-500/30"
+      case "rare":
+        return "shadow-blue-500/30"
+      case "epic":
+        return "shadow-purple-500/40"
+      case "legendary":
+        return "shadow-orange-500/50"
+      case "mythic":
+        return "shadow-red-500/60"
+      default:
+        return "shadow-gray-500/20"
+    }
+  }
 
   // Fonction pour obtenir tous les produits
   const getAllProducts = () => {
@@ -326,77 +406,107 @@ export default function ShopPage() {
   const getCategoryIcon = (category: string) => {
     switch (category) {
       case "diamonds":
-        return <Zap className="w-8 h-8 text-orange-600" />
+        return <Zap className="w-8 h-8 text-orange-400 drop-shadow-lg" />
       case "subscriptions":
-        return <Star className="w-8 h-8 text-blue-600" />
+        return <Star className="w-8 h-8 text-blue-400 drop-shadow-lg" />
       case "passes":
-        return <Crown className="w-8 h-8 text-purple-600" />
+        return <Crown className="w-8 h-8 text-purple-400 drop-shadow-lg" />
       case "specials":
-        return <Rocket className="w-8 h-8 text-green-600" />
+        return <Rocket className="w-8 h-8 text-green-400 drop-shadow-lg" />
       default:
-        return <Gift className="w-8 h-8 text-gray-600" />
+        return <Gift className="w-8 h-8 text-gray-400 drop-shadow-lg" />
     }
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white border-b">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <Trophy className="h-8 w-8 text-orange-600" />
-            <span className="text-2xl font-bold text-gray-900">FF Arena</span>
+    <div className="min-h-screen relative overflow-hidden">
+      <ParticlesBackground />
+
+      {/* Gaming Background */}
+      <div className="fixed inset-0 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 dark:from-black dark:via-purple-950 dark:to-black" />
+      <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-900/20 via-transparent to-transparent" />
+
+      {/* Gaming Header */}
+      <header className="relative z-10 backdrop-blur-xl bg-white/10 dark:bg-black/20 border-b border-white/20 dark:border-purple-500/30">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <Link href="/" className="flex items-center space-x-3 group">
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-red-500 rounded-xl blur-lg opacity-75 group-hover:opacity-100 transition-opacity" />
+                <div className="relative bg-gradient-to-r from-orange-500 to-red-500 p-2 rounded-xl">
+                  <Trophy className="h-8 w-8 text-white" />
+                </div>
+              </div>
+              <div>
+                <span className="text-2xl font-bold bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">
+                  GOKU FF E-SHOP
+                </span>
+                <div className="text-xs text-gray-400 dark:text-gray-500">Ultimate Gaming Store</div>
+              </div>
+            </Link>
+
+            <nav className="hidden md:flex items-center space-x-6">
+              <Link href="/dashboard" className="text-gray-300 hover:text-orange-400 transition-colors font-medium">
+                Dashboard
+              </Link>
+              <Link href="/tournaments" className="text-gray-300 hover:text-orange-400 transition-colors font-medium">
+                Tournois
+              </Link>
+              <ThemeToggle />
+            </nav>
           </div>
-          <nav className="flex items-center space-x-4">
-            <Link href="/dashboard" className="text-gray-600 hover:text-orange-600">
-              Dashboard
-            </Link>
-            <Link href="/tournaments" className="text-gray-600 hover:text-orange-600">
-              Tournois
-            </Link>
-          </nav>
         </div>
       </header>
 
-      <div className="container mx-auto px-4 py-8">
-        {/* Hero Section */}
-        <div className="mb-8 text-center bg-gradient-to-r from-orange-600 to-red-600 text-white rounded-xl p-8">
-          <h1 className="text-4xl font-bold mb-2">🥵👻👌 International E-Shop</h1>
-          <p className="text-xl opacity-90">Grille tarifaire officielle - Prix imbattables !</p>
-          <div className="mt-4 flex justify-center space-x-6 text-sm">
-            <div className="flex items-center space-x-1">
-              <Zap className="w-4 h-4" />
-              <span>Livraison Instantanée</span>
+      <div className="relative z-10 container mx-auto px-4 py-8">
+        {/* Gaming Hero Section */}
+        <div className="mb-12 text-center">
+          <GamingCard className="p-8 bg-gradient-to-r from-orange-500/20 to-red-500/20 border-orange-500/30">
+            <div className="flex items-center justify-center mb-4">
+              <Flame className="w-8 h-8 text-orange-400 mr-2" />
+              <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-orange-400 via-red-400 to-pink-400 bg-clip-text text-transparent">
+                🔥 GOKU FF E-SHOP 🔥
+              </h1>
+              <Flame className="w-8 h-8 text-orange-400 ml-2" />
             </div>
-            <div className="flex items-center space-x-1">
-              <Star className="w-4 h-4" />
-              <span>Prix Officiels</span>
+            <p className="text-xl text-gray-300 dark:text-gray-400 mb-6">
+              Grille tarifaire officielle - Prix imbattables !
+            </p>
+            <div className="flex flex-wrap justify-center gap-6 text-sm">
+              <div className="flex items-center space-x-2 bg-white/10 dark:bg-black/20 px-4 py-2 rounded-full backdrop-blur-sm">
+                <Zap className="w-4 h-4 text-orange-400" />
+                <span className="text-gray-200">Livraison Instantanée</span>
+              </div>
+              <div className="flex items-center space-x-2 bg-white/10 dark:bg-black/20 px-4 py-2 rounded-full backdrop-blur-sm">
+                <Star className="w-4 h-4 text-blue-400" />
+                <span className="text-gray-200">Prix Officiels</span>
+              </div>
+              <div className="flex items-center space-x-2 bg-white/10 dark:bg-black/20 px-4 py-2 rounded-full backdrop-blur-sm">
+                <Shield className="w-4 h-4 text-green-400" />
+                <span className="text-gray-200">100% Sécurisé</span>
+              </div>
             </div>
-            <div className="flex items-center space-x-1">
-              <Shield className="w-4 h-4" />
-              <span>100% Sécurisé</span>
-            </div>
-          </div>
+          </GamingCard>
         </div>
 
-        {/* Filtres et Recherche */}
-        <div className="mb-8 bg-white rounded-lg p-6 shadow-sm">
+        {/* Gaming Filters */}
+        <GamingCard className="mb-8 p-6">
           <div className="flex flex-col lg:flex-row gap-4 items-center">
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
               <Input
-                placeholder="Rechercher un produit..."
-                className="pl-10"
+                placeholder="Rechercher un produit gaming..."
+                className="pl-10 bg-white/5 dark:bg-black/20 border-white/20 dark:border-purple-500/30 text-gray-200 placeholder-gray-400"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
             <Select value={sortBy} onValueChange={setSortBy}>
-              <SelectTrigger className="w-full lg:w-48">
-                <Filter className="w-4 h-4 mr-2" />
+              <SelectTrigger className="w-full lg:w-48 bg-white/5 dark:bg-black/20 border-white/20 dark:border-purple-500/30 text-gray-200">
+                <Filter className="w-4 h-4 mr-2 text-purple-400" />
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-gray-900/95 border-purple-500/30 backdrop-blur-xl">
                 <SelectItem value="popular">Plus Populaires</SelectItem>
                 <SelectItem value="price-low">Prix Croissant</SelectItem>
                 <SelectItem value="price-high">Prix Décroissant</SelectItem>
@@ -404,71 +514,90 @@ export default function ShopPage() {
               </SelectContent>
             </Select>
           </div>
-        </div>
+        </GamingCard>
 
-        {/* Navigation par Catégories */}
-        <Tabs value={selectedCategory} onValueChange={setSelectedCategory} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2 lg:grid-cols-5 h-auto p-1">
+        {/* Gaming Categories */}
+        <Tabs value={selectedCategory} onValueChange={setSelectedCategory} className="space-y-8">
+          <TabsList className="grid w-full grid-cols-2 lg:grid-cols-5 h-auto p-1 bg-white/10 dark:bg-black/20 backdrop-blur-xl border border-white/20 dark:border-purple-500/30">
             {categories.map((category) => (
               <TabsTrigger
                 key={category.id}
                 value={category.id}
-                className="flex flex-col items-center space-y-1 p-3 data-[state=active]:bg-orange-600 data-[state=active]:text-white"
+                className="flex flex-col items-center space-y-2 p-4 data-[state=active]:bg-gradient-to-r data-[state=active]:from-orange-500 data-[state=active]:to-red-500 data-[state=active]:text-white transition-all duration-300 hover:bg-white/10 dark:hover:bg-black/20"
               >
-                <category.icon className="w-5 h-5" />
-                <span className="text-xs font-medium">{category.name}</span>
+                <category.icon className="w-6 h-6" />
+                <span className="text-sm font-medium">{category.name}</span>
               </TabsTrigger>
             ))}
           </TabsList>
 
-          {/* Contenu des Produits */}
+          {/* Gaming Products Grid */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {getFilteredProducts().map((product) => (
-              <Card
+              <GamingCard
                 key={product.id}
-                className={`relative hover:shadow-lg transition-all duration-300 hover:-translate-y-1 ${
-                  product.popular ? "ring-2 ring-orange-600 shadow-lg" : ""
+                className={`relative group hover:scale-105 transition-all duration-500 ${
+                  product.popular
+                    ? `ring-2 ring-orange-500/50 ${getRarityGlow(product.rarity)}`
+                    : getRarityGlow(product.rarity)
                 }`}
               >
                 {product.popular && (
                   <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 z-10">
-                    <Badge className="bg-orange-600 text-white px-3 py-1">
+                    <Badge className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-3 py-1 shadow-lg">
                       <Star className="w-3 h-3 mr-1" />
                       Populaire
                     </Badge>
                   </div>
                 )}
 
+                {/* Rarity Indicator */}
+                <div className="absolute top-2 right-2">
+                  <div
+                    className={`w-3 h-3 rounded-full bg-gradient-to-r ${getRarityColor(product.rarity)} shadow-lg`}
+                  />
+                </div>
+
                 <CardHeader className="text-center pb-2">
-                  <div className="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-orange-100 to-red-100 rounded-full flex items-center justify-center">
+                  <div className="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-white/10 to-white/5 dark:from-black/20 dark:to-black/10 rounded-full flex items-center justify-center backdrop-blur-sm border border-white/20 dark:border-purple-500/30">
                     {getCategoryIcon(product.category)}
                   </div>
 
-                  <CardTitle className="text-lg leading-tight">{product.name}</CardTitle>
+                  <CardTitle className="text-lg leading-tight text-gray-200 group-hover:text-white transition-colors">
+                    {product.name}
+                  </CardTitle>
 
                   {product.diamonds && (
-                    <div className="text-2xl font-bold text-orange-600">{product.diamonds.toLocaleString()}💎</div>
+                    <div className="text-2xl font-bold bg-gradient-to-r from-orange-400 to-yellow-400 bg-clip-text text-transparent">
+                      {product.diamonds.toLocaleString()}💎
+                    </div>
                   )}
 
                   {product.duration && (
-                    <div className="text-lg font-semibold text-blue-600 flex items-center justify-center">
+                    <div className="text-lg font-semibold text-blue-400 flex items-center justify-center">
                       <Calendar className="w-4 h-4 mr-1" />
                       {product.duration}
                     </div>
                   )}
 
-                  {product.level && <div className="text-lg font-semibold text-purple-600">Niveau {product.level}</div>}
+                  {product.level && (
+                    <div className="text-lg font-semibold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                      Niveau {product.level}
+                    </div>
+                  )}
                 </CardHeader>
 
-                <CardContent className="text-center space-y-3">
-                  <CardDescription className="text-sm min-h-[40px]">{product.description}</CardDescription>
+                <CardContent className="text-center space-y-4">
+                  <CardDescription className="text-sm min-h-[40px] text-gray-400">
+                    {product.description}
+                  </CardDescription>
 
                   {product.features && (
                     <div className="text-xs text-left">
                       <ul className="space-y-1">
                         {product.features.slice(0, 3).map((feature, index) => (
-                          <li key={index} className="flex items-center space-x-1">
-                            <span className="w-1 h-1 bg-orange-600 rounded-full"></span>
+                          <li key={index} className="flex items-center space-x-2 text-gray-300">
+                            <Sparkles className="w-3 h-3 text-purple-400" />
                             <span>{feature}</span>
                           </li>
                         ))}
@@ -476,9 +605,11 @@ export default function ShopPage() {
                     </div>
                   )}
 
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     <div className="text-center">
-                      <div className="text-xl font-bold text-gray-900">{formatPrice(product.price)}</div>
+                      <div className="text-xl font-bold bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
+                        {formatPrice(product.price)}
+                      </div>
                       {product.diamonds && (
                         <div className="text-xs text-gray-500">
                           {Math.round(product.price / product.diamonds)} CFA/💎
@@ -486,79 +617,91 @@ export default function ShopPage() {
                       )}
                     </div>
 
-                    <Button
+                    <GamingButton
                       onClick={() => handlePurchase(product)}
                       className={`w-full ${
-                        product.popular ? "bg-orange-600 hover:bg-orange-700" : "bg-gray-600 hover:bg-gray-700"
+                        product.popular
+                          ? "bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600"
+                          : "bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
                       }`}
                     >
-                      <Zap className="w-4 h-4 mr-2" />
+                      <Target className="w-4 h-4 mr-2" />
                       Acheter
-                    </Button>
+                    </GamingButton>
                   </div>
 
                   <p className="text-xs text-gray-500">MTN/Moov Money</p>
                 </CardContent>
-              </Card>
+              </GamingCard>
             ))}
           </div>
 
           {getFilteredProducts().length === 0 && (
             <div className="text-center py-12">
-              <div className="text-gray-400 mb-4">
-                <Search className="w-16 h-16 mx-auto" />
-              </div>
-              <h3 className="text-lg font-semibold text-gray-600 mb-2">Aucun produit trouvé</h3>
-              <p className="text-gray-500">Essayez de modifier vos critères de recherche</p>
+              <GamingCard className="max-w-md mx-auto p-8">
+                <div className="text-gray-400 mb-4">
+                  <Search className="w-16 h-16 mx-auto opacity-50" />
+                </div>
+                <h3 className="text-lg font-semibold text-gray-300 mb-2">Aucun produit trouvé</h3>
+                <p className="text-gray-500">Essayez de modifier vos critères de recherche</p>
+              </GamingCard>
             </div>
           )}
         </Tabs>
 
-        {/* Section Statistiques */}
+        {/* Gaming Statistics */}
         <div className="mt-16 grid md:grid-cols-4 gap-6">
-          <Card className="text-center bg-gradient-to-br from-orange-50 to-orange-100">
+          <GamingCard className="text-center bg-gradient-to-br from-orange-500/20 to-yellow-500/20 border-orange-500/30">
             <CardHeader>
-              <Zap className="h-8 w-8 text-orange-600 mx-auto mb-2" />
-              <CardTitle className="text-lg">Diamants</CardTitle>
+              <Zap className="h-8 w-8 text-orange-400 mx-auto mb-2 drop-shadow-lg" />
+              <CardTitle className="text-lg text-gray-200">Diamants</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold text-orange-600">11 Packs</p>
-              <p className="text-sm text-gray-600">De 110 à 2500 💎</p>
+              <p className="text-2xl font-bold bg-gradient-to-r from-orange-400 to-yellow-400 bg-clip-text text-transparent">
+                11 Packs
+              </p>
+              <p className="text-sm text-gray-400">De 110 à 2500 💎</p>
             </CardContent>
-          </Card>
+          </GamingCard>
 
-          <Card className="text-center bg-gradient-to-br from-blue-50 to-blue-100">
+          <GamingCard className="text-center bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border-blue-500/30">
             <CardHeader>
-              <Star className="h-8 w-8 text-blue-600 mx-auto mb-2" />
-              <CardTitle className="text-lg">Abonnements</CardTitle>
+              <Star className="h-8 w-8 text-blue-400 mx-auto mb-2 drop-shadow-lg" />
+              <CardTitle className="text-lg text-gray-200">Abonnements</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold text-blue-600">2 Formules</p>
-              <p className="text-sm text-gray-600">7 jours & 30 jours</p>
+              <p className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                2 Formules
+              </p>
+              <p className="text-sm text-gray-400">7 jours & 30 jours</p>
             </CardContent>
-          </Card>
+          </GamingCard>
 
-          <Card className="text-center bg-gradient-to-br from-purple-50 to-purple-100">
+          <GamingCard className="text-center bg-gradient-to-br from-purple-500/20 to-pink-500/20 border-purple-500/30">
             <CardHeader>
-              <Crown className="h-8 w-8 text-purple-600 mx-auto mb-2" />
-              <CardTitle className="text-lg">Passes</CardTitle>
+              <Crown className="h-8 w-8 text-purple-400 mx-auto mb-2 drop-shadow-lg" />
+              <CardTitle className="text-lg text-gray-200">Passes</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold text-purple-600">7 Options</p>
-              <p className="text-sm text-gray-600">Booyah & Level Up</p>
+              <p className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                7 Options
+              </p>
+              <p className="text-sm text-gray-400">Booyah & Level Up</p>
             </CardContent>
-          </Card>
+          </GamingCard>
 
-          <Card className="text-center bg-gradient-to-br from-green-50 to-green-100">
+          <GamingCard className="text-center bg-gradient-to-br from-green-500/20 to-emerald-500/20 border-green-500/30">
             <CardHeader>
-              <Rocket className="h-8 w-8 text-green-600 mx-auto mb-2" />
-              <CardTitle className="text-lg">Spéciaux</CardTitle>
+              <Rocket className="h-8 w-8 text-green-400 mx-auto mb-2 drop-shadow-lg" />
+              <CardTitle className="text-lg text-gray-200">Spéciaux</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold text-green-600">4 Offres</p>
-              <p className="text-sm text-gray-600">Largages & Evo</p>
+              <p className="text-2xl font-bold bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
+                4 Offres
+              </p>
+              <p className="text-sm text-gray-400">Largages & Evo</p>
             </CardContent>
-          </Card>
+          </GamingCard>
         </div>
       </div>
     </div>
