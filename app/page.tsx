@@ -2,494 +2,472 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { ParticlesBackground } from "@/components/ui/particles-background"
+import { ThemeToggle } from "@/components/ui/theme-toggle"
 import {
   Trophy,
-  Users,
   Zap,
+  Users,
   Star,
+  ShoppingCart,
   Crown,
-  Play,
-  Award,
+  Flame,
+  Gift,
   TrendingUp,
   Shield,
-  Target,
-  Flame,
+  Award,
   Sparkles,
-  ChevronRight,
-  Rocket,
+  Menu,
+  X,
 } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
-import { ThemeToggle } from "@/components/ui/theme-toggle"
-import { GamingButton } from "@/components/ui/gaming-button"
-import {
-  GamingCard,
-  GamingCardContent,
-  GamingCardDescription,
-  GamingCardHeader,
-  GamingCardTitle,
-} from "@/components/ui/gaming-card"
 
 export default function HomePage() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
-  const [activeFeature, setActiveFeature] = useState(0)
 
   useEffect(() => {
     setMounted(true)
-    const interval = setInterval(() => {
-      setActiveFeature((prev) => (prev + 1) % 6)
-    }, 3000)
-    return () => clearInterval(interval)
   }, [])
 
   if (!mounted) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="loading-spinner" />
-      </div>
-    )
+    return null
   }
 
-  const features = [
-    {
-      icon: Trophy,
-      title: "Tournois Épiques",
-      description: "Participez aux plus grands tournois Free Fire avec des prix allant jusqu'à 500K FCFA",
-      color: "text-yellow-500",
-      bgColor: "from-yellow-500/20 to-orange-500/20",
-    },
-    {
-      icon: Zap,
-      title: "Diamants Premium",
-      description: "Rechargez vos diamants Free Fire instantanément avec Mobile Money",
-      color: "text-blue-500",
-      bgColor: "from-blue-500/20 to-cyan-500/20",
-    },
-    {
-      icon: Shield,
-      title: "Sécurité Maximale",
-      description: "Plateforme 100% sécurisée avec système anti-triche avancé",
-      color: "text-green-500",
-      bgColor: "from-green-500/20 to-emerald-500/20",
-    },
-    {
-      icon: Users,
-      title: "Communauté Elite",
-      description: "Rejoignez plus de 50,000 joueurs passionnés de Free Fire",
-      color: "text-purple-500",
-      bgColor: "from-purple-500/20 to-pink-500/20",
-    },
-    {
-      icon: Target,
-      title: "Matchmaking Pro",
-      description: "Système de matchmaking équitable basé sur votre niveau",
-      color: "text-red-500",
-      bgColor: "from-red-500/20 to-rose-500/20",
-    },
-    {
-      icon: Crown,
-      title: "Programme VIP",
-      description: "Avantages exclusifs et récompenses pour nos membres premium",
-      color: "text-indigo-500",
-      bgColor: "from-indigo-500/20 to-violet-500/20",
-    },
-  ]
-
-  const stats = [
-    { label: "Joueurs Actifs", value: "50K+", icon: Users, color: "text-blue-500" },
-    { label: "Tournois Organisés", value: "1.2K+", icon: Trophy, color: "text-yellow-500" },
-    { label: "Diamants Vendus", value: "10M+", icon: Zap, color: "text-purple-500" },
-    { label: "Taux de Satisfaction", value: "99.8%", icon: Star, color: "text-green-500" },
-  ]
-
-  const testimonials = [
-    {
-      name: "ProGamer_2024",
-      text: "FF Arena a révolutionné ma façon de jouer à Free Fire. Les tournois sont incroyables !",
-      rating: 5,
-    },
-    {
-      name: "DiamondKing",
-      text: "Livraison instantanée des diamants, service client au top. Je recommande à 100% !",
-      rating: 5,
-    },
-    {
-      name: "FireQueen",
-      text: "La meilleure plateforme gaming que j'ai jamais utilisée. Interface magnifique !",
-      rating: 5,
-    },
-  ]
-
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen relative overflow-hidden">
+      <ParticlesBackground />
+
       {/* Navigation */}
-      <nav className="glass-card mx-4 mt-4 p-4 sticky top-4 z-50">
-        <div className="container mx-auto flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <div className="relative">
-              <div className="w-12 h-12 bg-gaming-gradient rounded-xl flex items-center justify-center pulse-glow">
-                <Flame className="w-7 h-7 text-white" />
+      <nav className="relative z-50 glass border-b border-white/10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2">
+                <Crown className="h-8 w-8 text-orange-500" />
+                <span className="font-gaming text-xl gradient-text">GOKU FF E-SHOP</span>
               </div>
-              <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full animate-pulse" />
             </div>
-            <div>
-              <h1 className="text-2xl font-gaming font-black gradient-text">FF ARENA</h1>
-              <p className="text-xs text-muted-foreground font-display">Ultimate Gaming Platform</p>
+
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-8">
+              <Link href="/" className="nav-link text-foreground hover:text-orange-500">
+                Accueil
+              </Link>
+              <Link href="/tournaments" className="nav-link text-foreground hover:text-orange-500">
+                Tournois
+              </Link>
+              <Link href="/shop" className="nav-link text-foreground hover:text-orange-500">
+                Boutique
+              </Link>
+              <Link href="/dashboard" className="nav-link text-foreground hover:text-orange-500">
+                Dashboard
+              </Link>
+              <ThemeToggle />
+            </div>
+
+            {/* Mobile menu button */}
+            <div className="md:hidden flex items-center space-x-2">
+              <ThemeToggle />
+              <Button variant="ghost" size="sm" onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-foreground">
+                {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              </Button>
             </div>
           </div>
 
-          <div className="hidden md:flex items-center space-x-8">
-            <Link href="/tournaments" className="nav-link light-mode-text">
-              Tournois
-            </Link>
-            <Link href="/shop" className="nav-link light-mode-text">
-              Boutique
-            </Link>
-            <Link href="/leaderboard" className="nav-link light-mode-text">
-              Classement
-            </Link>
-            <Link href="/dashboard" className="nav-link light-mode-text">
-              Dashboard
-            </Link>
-          </div>
-
-          <div className="flex items-center space-x-4">
-            <ThemeToggle />
-            <Link href="/auth/login">
-              <GamingButton variant="outline" size="sm">
-                Connexion
-              </GamingButton>
-            </Link>
-            <Link href="/auth/register">
-              <GamingButton size="sm" className="shadow-xl">
-                <Sparkles className="w-4 h-4 mr-2" />
-                S'inscrire
-              </GamingButton>
-            </Link>
-          </div>
+          {/* Mobile Navigation */}
+          {isMenuOpen && (
+            <div className="md:hidden py-4 border-t border-white/10">
+              <div className="flex flex-col space-y-4">
+                <Link href="/" className="nav-link text-foreground hover:text-orange-500">
+                  Accueil
+                </Link>
+                <Link href="/tournaments" className="nav-link text-foreground hover:text-orange-500">
+                  Tournois
+                </Link>
+                <Link href="/shop" className="nav-link text-foreground hover:text-orange-500">
+                  Boutique
+                </Link>
+                <Link href="/dashboard" className="nav-link text-foreground hover:text-orange-500">
+                  Dashboard
+                </Link>
+              </div>
+            </div>
+          )}
         </div>
       </nav>
 
       {/* Hero Section */}
-      <section className="container mx-auto px-4 py-20 text-center relative">
-        {/* Floating Elements */}
-        <div className="absolute top-20 left-10 w-20 h-20 bg-orange-500/20 rounded-full blur-xl animate-pulse float" />
-        <div
-          className="absolute top-40 right-20 w-32 h-32 bg-purple-500/20 rounded-full blur-xl animate-pulse float"
-          style={{ animationDelay: "1s" }}
-        />
-        <div
-          className="absolute bottom-20 left-1/4 w-16 h-16 bg-blue-500/20 rounded-full blur-xl animate-pulse float"
-          style={{ animationDelay: "2s" }}
-        />
+      <section className="relative z-10 pt-20 pb-32 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto text-center">
+          <div className="text-reveal">
+            <h1 className="text-6xl md:text-8xl font-gaming gradient-text mb-6 leading-tight">GOKU FF</h1>
+            <h2 className="text-3xl md:text-5xl font-display text-foreground mb-8">Ultimate Gaming Store</h2>
+            <p className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-3xl mx-auto leading-relaxed">
+              Rejoignez la révolution gaming ! Tournois épiques, diamants premium, et une communauté de champions vous
+              attendent.
+            </p>
+          </div>
 
-        <div className="max-w-5xl mx-auto relative z-10">
-          <Badge className="badge-gaming mb-8 px-6 py-3 text-sm font-bold">
-            <Star className="w-4 h-4 mr-2" />
-            PLATEFORME N°1 EN AFRIQUE DE L'OUEST
-          </Badge>
-
-          <h1 className="text-6xl md:text-8xl lg:text-9xl font-gaming font-black mb-8 leading-tight">
-            <span className="gradient-text text-reveal">DOMINEZ</span>
-            <br />
-            <span className="gradient-text text-reveal" style={{ animationDelay: "0.2s" }}>
-              FREE FIRE
-            </span>
-          </h1>
-
-          <p
-            className="text-xl md:text-2xl lg:text-3xl light-mode-text mb-12 max-w-4xl mx-auto font-display leading-relaxed text-reveal"
-            style={{ animationDelay: "0.4s" }}
-          >
-            La plateforme gaming ultime qui révolutionne votre expérience Free Fire avec des tournois épiques, des
-            diamants premium et une communauté de champions
-          </p>
-
-          <div
-            className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16 text-reveal"
-            style={{ animationDelay: "0.6s" }}
-          >
-            <Link href="/tournaments">
-              <GamingButton variant="neon" size="xl" className="group shadow-2xl">
-                <Play className="mr-3 h-6 w-6 group-hover:scale-110 transition-transform" />
-                REJOINDRE UN TOURNOI
-                <ChevronRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-              </GamingButton>
-            </Link>
-            <Link href="/shop">
-              <GamingButton variant="outline" size="xl" className="group shadow-xl">
-                <Zap className="mr-3 h-6 w-6 group-hover:rotate-12 transition-transform" />
-                ACHETER DES DIAMANTS
-              </GamingButton>
-            </Link>
+          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
+            <Button asChild size="lg" className="btn-gaming text-white font-bold px-8 py-4 text-lg">
+              <Link href="/tournaments">
+                <Trophy className="mr-2 h-6 w-6" />
+                Rejoindre un Tournoi
+              </Link>
+            </Button>
+            <Button
+              asChild
+              variant="outline"
+              size="lg"
+              className="glass border-orange-500/50 hover:bg-orange-500/10 px-8 py-4 text-lg bg-transparent"
+            >
+              <Link href="/shop">
+                <ShoppingCart className="mr-2 h-6 w-6" />
+                Explorer la Boutique
+              </Link>
+            </Button>
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-reveal" style={{ animationDelay: "0.8s" }}>
-            {stats.map((stat, index) => (
-              <GamingCard key={index} variant="glass" className="text-center hover-lift">
-                <GamingCardContent className="p-6">
-                  <div className="w-16 h-16 bg-gaming-gradient rounded-2xl flex items-center justify-center mx-auto mb-4 pulse-glow">
-                    <stat.icon className="h-8 w-8 text-white" />
-                  </div>
-                  <div className="text-3xl font-gaming font-black gradient-text mb-2">{stat.value}</div>
-                  <div className="text-sm light-mode-text font-display font-semibold">{stat.label}</div>
-                </GamingCardContent>
-              </GamingCard>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
+            {[
+              { icon: Users, label: "Joueurs Actifs", value: "50K+" },
+              { icon: Trophy, label: "Tournois", value: "1,200+" },
+              { icon: Gift, label: "Récompenses", value: "₹2M+" },
+              { icon: Star, label: "Note Moyenne", value: "4.9/5" },
+            ].map((stat, index) => (
+              <div key={index} className="glass-card p-6 hover-lift">
+                <stat.icon className="h-8 w-8 text-orange-500 mx-auto mb-3" />
+                <div className="text-2xl font-bold text-foreground">{stat.value}</div>
+                <div className="text-sm text-muted-foreground">{stat.label}</div>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section className="container mx-auto px-4 py-20 relative">
-        <div className="text-center mb-16">
-          <Badge className="badge-gaming mb-6 px-4 py-2">
-            <Rocket className="w-4 h-4 mr-2" />
-            FONCTIONNALITÉS PREMIUM
-          </Badge>
-          <h2 className="text-5xl md:text-6xl font-gaming font-black mb-6">
-            <span className="gradient-text">POURQUOI CHOISIR</span>
-            <br />
-            <span className="gradient-text">FF ARENA ?</span>
-          </h2>
-          <p className="text-xl md:text-2xl light-mode-text max-w-3xl mx-auto font-display leading-relaxed">
-            Une expérience gaming révolutionnaire avec des fonctionnalités uniques qui vous donnent l'avantage
-          </p>
-        </div>
+      <section className="relative z-10 py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-6xl font-gaming gradient-text mb-6">Fonctionnalités Épiques</h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              Découvrez tout ce qui fait de GOKU FF la plateforme gaming ultime
+            </p>
+          </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {features.map((feature, index) => (
-            <GamingCard
-              key={index}
-              variant="glass"
-              className={`text-center group cursor-pointer transition-all duration-500 ${
-                activeFeature === index ? "neon-glow scale-105" : ""
-              }`}
-              onMouseEnter={() => setActiveFeature(index)}
-            >
-              <GamingCardHeader>
-                <div
-                  className={`w-20 h-20 bg-gradient-to-br ${feature.bgColor} rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg`}
-                >
-                  <feature.icon className={`h-10 w-10 ${feature.color}`} />
-                </div>
-                <GamingCardTitle className="group-hover:scale-105 transition-transform duration-300 mb-4">
-                  {feature.title}
-                </GamingCardTitle>
-                <GamingCardDescription className="light-mode-text group-hover:text-gaming transition-colors text-base leading-relaxed">
-                  {feature.description}
-                </GamingCardDescription>
-              </GamingCardHeader>
-            </GamingCard>
-          ))}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[
+              {
+                icon: Trophy,
+                title: "Tournois Épiques",
+                description: "Participez à des tournois quotidiens avec des prix incroyables",
+                color: "text-yellow-500",
+              },
+              {
+                icon: Zap,
+                title: "Diamants Premium",
+                description: "Achetez des diamants Free Fire aux meilleurs prix",
+                color: "text-blue-500",
+              },
+              {
+                icon: Shield,
+                title: "Sécurité Maximale",
+                description: "Transactions 100% sécurisées et protection des données",
+                color: "text-green-500",
+              },
+              {
+                icon: Users,
+                title: "Communauté Active",
+                description: "Rejoignez une communauté de 50,000+ joueurs passionnés",
+                color: "text-purple-500",
+              },
+              {
+                icon: Award,
+                title: "Récompenses Exclusives",
+                description: "Débloquez des récompenses uniques et des bonus quotidiens",
+                color: "text-orange-500",
+              },
+              {
+                icon: TrendingUp,
+                title: "Classements Live",
+                description: "Suivez vos performances en temps réel",
+                color: "text-red-500",
+              },
+            ].map((feature, index) => (
+              <Card key={index} className="card-gaming hover-lift">
+                <CardHeader>
+                  <feature.icon className={`h-12 w-12 ${feature.color} mb-4`} />
+                  <CardTitle className="text-xl font-gaming text-foreground">{feature.title}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription className="text-muted-foreground">{feature.description}</CardDescription>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* Testimonials Section */}
-      <section className="container mx-auto px-4 py-20">
-        <div className="text-center mb-16">
-          <Badge className="badge-gaming mb-6 px-4 py-2">
-            <Award className="w-4 h-4 mr-2" />
-            TÉMOIGNAGES
-          </Badge>
-          <h2 className="text-4xl md:text-5xl font-gaming font-black gradient-text mb-6">
-            CE QUE DISENT NOS CHAMPIONS
-          </h2>
-        </div>
+      {/* Tournaments Section */}
+      <section className="relative z-10 py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-6xl font-gaming gradient-text mb-6">Tournois en Cours</h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              Participez aux tournois les plus excitants et gagnez des prix incroyables
+            </p>
+          </div>
 
-        <div className="grid md:grid-cols-3 gap-8">
-          {testimonials.map((testimonial, index) => (
-            <GamingCard key={index} variant="glass" className="hover-lift">
-              <GamingCardContent className="p-8">
-                <div className="flex mb-4">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 text-yellow-500 fill-current" />
-                  ))}
-                </div>
-                <p className="light-mode-text mb-6 font-display text-lg leading-relaxed italic">"{testimonial.text}"</p>
-                <div className="flex items-center">
-                  <div className="w-10 h-10 bg-gaming-gradient rounded-full flex items-center justify-center mr-3">
-                    <Users className="w-5 h-5 text-white" />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[
+              {
+                title: "Championship Elite",
+                prize: "₹50,000",
+                participants: "2,456",
+                timeLeft: "2h 30m",
+                status: "En cours",
+                difficulty: "Expert",
+              },
+              {
+                title: "Weekly Warriors",
+                prize: "₹25,000",
+                participants: "1,234",
+                timeLeft: "1d 5h",
+                status: "Inscription",
+                difficulty: "Intermédiaire",
+              },
+              {
+                title: "Rookie Rush",
+                prize: "₹10,000",
+                participants: "856",
+                timeLeft: "3d 12h",
+                status: "Bientôt",
+                difficulty: "Débutant",
+              },
+            ].map((tournament, index) => (
+              <Card key={index} className="card-gaming hover-lift">
+                <CardHeader>
+                  <div className="flex justify-between items-start mb-4">
+                    <Badge className="badge-gaming">{tournament.status}</Badge>
+                    <Badge variant="outline" className="border-orange-500/50">
+                      {tournament.difficulty}
+                    </Badge>
                   </div>
-                  <span className="font-gaming font-bold gradient-text">{testimonial.name}</span>
-                </div>
-              </GamingCardContent>
-            </GamingCard>
-          ))}
+                  <CardTitle className="text-xl font-gaming text-foreground">{tournament.title}</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <span className="text-muted-foreground">Prix Total</span>
+                    <span className="text-2xl font-bold text-orange-500">{tournament.prize}</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-muted-foreground">Participants</span>
+                    <span className="font-semibold text-foreground">{tournament.participants}</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-muted-foreground">Temps Restant</span>
+                    <span className="font-semibold text-foreground">{tournament.timeLeft}</span>
+                  </div>
+                  <Button className="w-full btn-gaming text-white font-bold">
+                    <Trophy className="mr-2 h-4 w-4" />
+                    Rejoindre
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          <div className="text-center mt-12">
+            <Button
+              asChild
+              size="lg"
+              variant="outline"
+              className="glass border-orange-500/50 hover:bg-orange-500/10 bg-transparent"
+            >
+              <Link href="/tournaments">
+                Voir Tous les Tournois
+                <Sparkles className="ml-2 h-5 w-5" />
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Shop Preview */}
+      <section className="relative z-10 py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-6xl font-gaming gradient-text mb-6">Boutique Premium</h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              Les meilleurs prix pour vos diamants Free Fire et bien plus encore
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[
+              {
+                title: "100 Diamants",
+                price: "₹80",
+                originalPrice: "₹100",
+                discount: "20%",
+                popular: false,
+              },
+              {
+                title: "520 Diamants",
+                price: "₹400",
+                originalPrice: "₹520",
+                discount: "23%",
+                popular: true,
+              },
+              {
+                title: "1080 Diamants",
+                price: "₹800",
+                originalPrice: "₹1080",
+                discount: "26%",
+                popular: false,
+              },
+              {
+                title: "2180 Diamants",
+                price: "₹1500",
+                originalPrice: "₹2180",
+                discount: "31%",
+                popular: false,
+              },
+            ].map((item, index) => (
+              <Card key={index} className={`card-gaming hover-lift ${item.popular ? "ring-2 ring-orange-500" : ""}`}>
+                <CardHeader>
+                  {item.popular && (
+                    <Badge className="badge-gaming mb-2 w-fit">
+                      <Star className="mr-1 h-3 w-3" />
+                      Populaire
+                    </Badge>
+                  )}
+                  <CardTitle className="text-lg font-gaming text-foreground">{item.title}</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-orange-500">{item.price}</div>
+                    <div className="text-sm text-muted-foreground line-through">{item.originalPrice}</div>
+                    <Badge variant="secondary" className="mt-2">
+                      -{item.discount}
+                    </Badge>
+                  </div>
+                  <Button className="w-full btn-gaming text-white font-bold">
+                    <ShoppingCart className="mr-2 h-4 w-4" />
+                    Acheter
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          <div className="text-center mt-12">
+            <Button
+              asChild
+              size="lg"
+              variant="outline"
+              className="glass border-orange-500/50 hover:bg-orange-500/10 bg-transparent"
+            >
+              <Link href="/shop">
+                Explorer la Boutique Complète
+                <ShoppingCart className="ml-2 h-5 w-5" />
+              </Link>
+            </Button>
+          </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="container mx-auto px-4 py-20 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gaming-gradient opacity-10 rounded-3xl" />
-        <GamingCard variant="glass" className="text-center p-12 neon-glow relative z-10 light-mode-shadow">
-          <GamingCardContent>
-            <div className="max-w-4xl mx-auto">
-              <Badge className="badge-gaming mb-8 px-6 py-3 text-lg">
-                <Crown className="w-5 h-5 mr-2" />
-                REJOIGNEZ L'ÉLITE GAMING
-              </Badge>
-
-              <h2 className="text-5xl md:text-6xl font-gaming font-black mb-8">
-                <span className="gradient-text">PRÊT À DEVENIR</span>
-                <br />
-                <span className="gradient-text">UNE LÉGENDE ?</span>
-              </h2>
-
-              <p className="text-2xl md:text-3xl light-mode-text mb-12 font-display leading-relaxed">
-                Rejoignez plus de <span className="font-bold gradient-text">50,000 joueurs</span> qui dominent Free Fire
-                avec FF Arena
-              </p>
-
-              <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-8">
+      <section className="relative z-10 py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto text-center">
+          <div className="glass-card p-12 hover-lift">
+            <Flame className="h-16 w-16 text-orange-500 mx-auto mb-6" />
+            <h2 className="text-4xl md:text-5xl font-gaming gradient-text mb-6">Prêt à Dominer ?</h2>
+            <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+              Rejoignez GOKU FF dès maintenant et commencez votre ascension vers la gloire gaming !
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button asChild size="lg" className="btn-gaming text-white font-bold px-8 py-4">
                 <Link href="/auth/register">
-                  <GamingButton variant="neon" size="xl" className="group shadow-2xl">
-                    <Users className="mr-3 h-6 w-6 group-hover:scale-110 transition-transform" />
-                    CRÉER MON COMPTE ELITE
-                    <Sparkles className="ml-2 h-5 w-5 group-hover:rotate-12 transition-transform" />
-                  </GamingButton>
+                  <Crown className="mr-2 h-5 w-5" />
+                  Créer un Compte
                 </Link>
-                <Link href="/tournaments">
-                  <GamingButton variant="outline" size="xl" className="group shadow-xl">
-                    <TrendingUp className="mr-3 h-6 w-6 group-hover:scale-110 transition-transform" />
-                    VOIR LES TOURNOIS LIVE
-                  </GamingButton>
-                </Link>
-              </div>
-
-              <div className="flex justify-center items-center space-x-8 text-light-mode-text">
-                <div className="flex items-center space-x-2">
-                  <Shield className="w-5 h-5 text-green-500" />
-                  <span className="font-display font-semibold">100% Sécurisé</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Zap className="w-5 h-5 text-yellow-500" />
-                  <span className="font-display font-semibold">Livraison Instantanée</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Star className="w-5 h-5 text-purple-500" />
-                  <span className="font-display font-semibold">Support 24/7</span>
-                </div>
-              </div>
+              </Button>
+              <Button
+                asChild
+                variant="outline"
+                size="lg"
+                className="glass border-orange-500/50 hover:bg-orange-500/10 px-8 py-4 bg-transparent"
+              >
+                <Link href="/auth/login">Se Connecter</Link>
+              </Button>
             </div>
-          </GamingCardContent>
-        </GamingCard>
+          </div>
+        </div>
       </section>
 
       {/* Footer */}
-      <footer className="glass-card mx-4 mb-4 p-8 light-mode-shadow">
-        <div className="container mx-auto">
-          <div className="grid md:grid-cols-4 gap-8 mb-8">
-            <div>
-              <div className="flex items-center space-x-3 mb-6">
-                <div className="w-12 h-12 bg-gaming-gradient rounded-xl flex items-center justify-center pulse-glow">
-                  <Flame className="h-7 w-7 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-gaming font-black gradient-text">FF ARENA</h3>
-                  <p className="text-sm light-mode-text font-display">Ultimate Gaming Platform</p>
-                </div>
+      <footer className="relative z-10 glass border-t border-white/10 mt-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div className="col-span-1 md:col-span-2">
+              <div className="flex items-center space-x-2 mb-4">
+                <Crown className="h-8 w-8 text-orange-500" />
+                <span className="font-gaming text-xl gradient-text">GOKU FF E-SHOP</span>
               </div>
-              <p className="light-mode-text font-display leading-relaxed">
-                La plateforme de référence pour les tournois Free Fire en Afrique de l'Ouest. Rejoignez l'élite gaming
-                dès aujourd'hui !
+              <p className="text-muted-foreground mb-4 max-w-md">
+                La plateforme gaming ultime pour Free Fire. Tournois, boutique premium, et communauté active.
               </p>
             </div>
 
             <div>
-              <h3 className="font-gaming font-bold mb-4 gradient-text">TOURNOIS</h3>
-              <ul className="space-y-3 text-sm light-mode-text font-display">
-                <li>
-                  <Link href="/tournaments" className="hover:text-gaming transition-colors">
-                    Tournois Actifs
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/tournaments" className="hover:text-gaming transition-colors">
-                    Calendrier
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/tournaments" className="hover:text-gaming transition-colors">
-                    Règlements
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/tournaments" className="hover:text-gaming transition-colors">
-                    Classements
-                  </Link>
-                </li>
-              </ul>
+              <h3 className="font-gaming text-foreground mb-4">Navigation</h3>
+              <div className="space-y-2">
+                <Link href="/" className="block text-muted-foreground hover:text-orange-500 transition-colors">
+                  Accueil
+                </Link>
+                <Link
+                  href="/tournaments"
+                  className="block text-muted-foreground hover:text-orange-500 transition-colors"
+                >
+                  Tournois
+                </Link>
+                <Link href="/shop" className="block text-muted-foreground hover:text-orange-500 transition-colors">
+                  Boutique
+                </Link>
+                <Link href="/dashboard" className="block text-muted-foreground hover:text-orange-500 transition-colors">
+                  Dashboard
+                </Link>
+              </div>
             </div>
 
             <div>
-              <h3 className="font-gaming font-bold mb-4 gradient-text">BOUTIQUE</h3>
-              <ul className="space-y-3 text-sm light-mode-text font-display">
-                <li>
-                  <Link href="/shop" className="hover:text-gaming transition-colors">
-                    Diamants Premium
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/shop" className="hover:text-gaming transition-colors">
-                    Passes VIP
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/shop" className="hover:text-gaming transition-colors">
-                    Offres Spéciales
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/shop" className="hover:text-gaming transition-colors">
-                    Abonnements
-                  </Link>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="font-gaming font-bold mb-4 gradient-text">SUPPORT</h3>
-              <ul className="space-y-3 text-sm light-mode-text font-display">
-                <li>
-                  <Link href="#" className="hover:text-gaming transition-colors">
-                    Centre d'Aide
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:text-gaming transition-colors">
-                    Contact
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:text-gaming transition-colors">
-                    Discord
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:text-gaming transition-colors">
-                    FAQ
-                  </Link>
-                </li>
-              </ul>
+              <h3 className="font-gaming text-foreground mb-4">Support</h3>
+              <div className="space-y-2">
+                <Link href="/support" className="block text-muted-foreground hover:text-orange-500 transition-colors">
+                  Centre d'aide
+                </Link>
+                <Link href="/contact" className="block text-muted-foreground hover:text-orange-500 transition-colors">
+                  Contact
+                </Link>
+                <Link href="/terms" className="block text-muted-foreground hover:text-orange-500 transition-colors">
+                  Conditions
+                </Link>
+                <Link href="/privacy" className="block text-muted-foreground hover:text-orange-500 transition-colors">
+                  Confidentialité
+                </Link>
+              </div>
             </div>
           </div>
 
-          <div className="border-t border-gaming/20 pt-8 flex flex-col md:flex-row items-center justify-between">
-            <p className="light-mode-text font-display mb-4 md:mb-0">
-              © 2024 FF Arena. Tous droits réservés. Conçu pour les vrais gamers 🔥
+          <div className="border-t border-white/10 mt-8 pt-8 text-center">
+            <p className="text-muted-foreground">
+              © 2024 GOKU FF E-SHOP. Tous droits réservés. Fait avec ❤️ pour la communauté gaming.
             </p>
-            <div className="flex space-x-6 text-sm light-mode-text font-display">
-              <Link href="/terms" className="hover:text-gaming transition-colors">
-                Conditions d'utilisation
-              </Link>
-              <Link href="/privacy" className="hover:text-gaming transition-colors">
-                Confidentialité
-              </Link>
-              <Link href="/cookies" className="hover:text-gaming transition-colors">
-                Cookies
-              </Link>
-            </div>
           </div>
         </div>
       </footer>
